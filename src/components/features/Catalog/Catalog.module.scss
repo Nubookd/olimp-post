@@ -1,0 +1,75 @@
+@use "@/styles/variables.scss" as *;
+
+.catalog__wraper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.catalog {
+  width: 50%;
+  max-width: 720px;
+  border: 1px solid black;
+  text-align: left;
+
+  thead {
+    tr {
+      td {
+        font-size: $text__3;
+        font-weight: 600;
+      }
+    }
+  }
+
+  tbody {
+    white-space: nowrap;
+    tr {
+      font-size: $text__4;
+      th {
+        font-size: $text__3;
+        font-weight: 600;
+      }
+      td {
+        font-size: $text__3;
+        font-weight: normal;
+      }
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .catalog {
+    width: 100%;
+    max-width: 1400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .catalog {
+    tbody {
+      tr {
+        th {
+          font-size: $text__4;
+          font-weight: 600;
+        }
+        td {
+          font-size: $text__4;
+          font-weight: normal;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  .catalog {
+    thead {
+      tr {
+        td {
+          font-size: $text__4;
+          font-weight: 800;
+        }
+      }
+    }
+  }
+}

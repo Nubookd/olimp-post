@@ -1,0 +1,59 @@
+@use "@/styles/variables.scss" as *;
+
+.cheque {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+
+  width: 45%;
+  max-width: 648px;
+  background-color: $gray;
+  padding: 10px;
+  border-radius: 10px;
+  &__title {
+    font-size: $text__2;
+  }
+  &__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  &__inner {
+    display: flex;
+    justify-content: space-between;
+    // display: grid;
+    // grid-template-columns: 60% 10% 30%;
+  }
+  &__footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    label {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    &--inner {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+}
+
+@media (max-width: 800px) {
+  .cheque {
+    width: 70%;
+    max-width: 980px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cheque {
+    width: 95%;
+    max-width: 1296px;
+  }
+}

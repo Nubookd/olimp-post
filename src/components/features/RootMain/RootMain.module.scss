@@ -1,0 +1,20 @@
+@use "@/styles/variables.scss" as *;
+
+.main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+
+@media (max-width: 800px) {
+  .main {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 30px;
+  }
+}
+
