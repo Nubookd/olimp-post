@@ -3,6 +3,7 @@ import "./globals.css";
 
 import Header from "@/components/layout/Header/Header";
 import Footer from "@/components/layout/Footer/Footer";
+import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,11 +18,13 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body>
+        <AuthProvider>
           <div className="container">
             <Header />
             {children}
             <Footer />
           </div>
+        </AuthProvider>
       </body>
     </html>
   );
