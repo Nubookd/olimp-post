@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+  engineType = "client"
+}
+
+datasource db {
+  provider = "postgresql"
+  
+}
+
+enum Role {
+  CUSTOMER
+  OPERATOR
+  DISPATCHER
+  COURIER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  AGREED
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model User {
+  id           Int    @id @default(autoincrement())
+  login        String @unique
+  email        String @unique
+  passwordHash String
+  role         Role   @default(CUSTOMER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  refreshTokens  RefreshToken[]
+  customerOrders Orders[]       @relation("CustomerOrders")
+  courierOrders  Orders[]       @relation("CourierOrders")
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isValid   Boolean  @default(true)
+  expiresAt DateTime @default(now())
+
+  @@index([token])
+  @@index([userId])
+  @@map("refreshTokens")
+}
+
+model Orders {
+  id         Int  @id @default(autoincrement())
+  customerId Int
+  customer   User @relation("CustomerOrders", fields: [customerId], references: [id], onDelete: Cascade)
+
+  items Json @default("[]")
+
+  totalCost Int
+  status    OrderStatus @default(PENDING)
+
+  deliveryAddress String
+  deliveryLat     Float? @default(0)
+  deliveryLon     Float? @default(0)
+
+  courierId    Int?
+  dispatcherId Int?
+  courier      User? @relation("CourierOrders", fields: [courierId], references: [id], onDelete: Cascade)
+
+  term       DateTime
+  approvedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+
+  @@index([customerId])
+  @@index([courierId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+model Product {
+  id    Int    @id @default(autoincrement())
+  name  String
+  class String
+  stamp String
+  price Int
+
+  @@map("products")
+}
