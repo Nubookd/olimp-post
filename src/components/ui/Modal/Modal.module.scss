@@ -1,0 +1,66 @@
+@use "@/styles/variables.scss" as *;
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  backdrop-filter: blur(2px);
+
+  pointer-events: auto;
+  cursor: default;
+
+  * {
+    pointer-events: none !important;
+  }
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: $gray;
+  z-index: 1000;
+  width: clamp(300px, 70vw, 1400px);
+  height: fit-content;
+  min-height: 400px;
+  max-height: 70vh;
+  padding: 10px;
+  animation: modalAppear 0.3s ease-out;
+
+  overflow: auto;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  p, span {
+    text-align: center;
+  }
+
+  &--close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+  }
+}
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

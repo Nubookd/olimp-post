@@ -1,0 +1,35 @@
+@use "@/styles/variables.scss" as *;
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &__phone {
+    font-size: $text__2;
+    white-space: nowrap;
+  }
+  &__action {
+    max-width: 244px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 2vw;
+    width: 20vw;
+    & > * {
+      width: 9vw;
+      aspect-ratio: 1;
+      max-width: 60px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .header {
+    &__phone {
+      font-size: $text__3;
+    }
+  }
+}
