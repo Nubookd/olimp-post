@@ -1,9 +1,9 @@
 import { ICheque, IClientResponse } from "@/types";
 import Customer from "../models/customerModel";
-import { authHelper } from "@/utils/auth-helper";
+import { authHelper } from "../utils/auth-helper";
 import UserOrders from "./UserOrders";
 import { CreateOrderSchema } from "../validators/orders.validator";
-import { formatZodError } from "@/utils/zod-error-formatter";
+import { formatZodError } from "../utils/zod-error-formatter";
 import { ZodError } from "zod";
 
 export default class CustomerOrders extends UserOrders {

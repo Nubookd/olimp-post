@@ -1,10 +1,13 @@
-import { IClientResponse, OrderStatus, UserRole } from "@/types";
+import { IClientResponse, UserRole } from "@/types";
 import User from "../models/userModel";
-import { authHelper } from "@/lib/utils/auth-helper";
-import { MeOrdersSchema } from "../validators/orders.validator";
+import { authHelper } from "../utils/auth-helper";
+import {
+  ChangeOrderStatusSchema,
+  MeOrdersSchema,
+} from "../validators/orders.validator";
 import { ZodError } from "zod";
-import { formatZodError } from "@/lib/utils/zod-error-formatter";
-import { UserRoleSchema } from "@/lib/validators/common.validator";
+import { formatZodError } from "../utils/zod-error-formatter";
+import { UserRoleSchema } from "../validators/common.validator";
 
 export default class UserOrders {
   static async getDetailsOrder(orderId: number): Promise<IClientResponse> {
@@ -26,6 +29,57 @@ export default class UserOrders {
         order: res.order,
       };
     } catch (error) {
+      return {
+        success: false,
+        message: "Внутренняя ошибка сервера | service",
+        status: 500,
+      };
+    }
+  }
+
+  static async changeOrderStatus(
+    orderId: number,
+    role: UserRole,
+    newStatus: OrderStatus,
+    currentStatus: OrderStatus,
+  ): Promise<IClientResponse> {
+    try {
+      const validData = ChangeOrderStatusSchema.parse({
+        orderId,
+        role,
+        newStatus,
+        currentStatus,
+      });
+      const orderCheck = await User.checkExistenceOrder(validData.orderId);
+      if (!orderCheck.success) {
+        return orderCheck;
+      }
+      const isAuth: IClientResponse = await authHelper(
+        currentStatus,
+        validData.newStatus,
+      );
+      if (!isAuth.success) {
+        return {
+          success: false,
+          message: isAuth.message,
+          status: isAuth.status,
+        };
+      }
+      const res = await User.changeOrderStatus(
+        validData.orderId,
+        validData.role,
+        validData.newStatus,
+        validData.currentStatus,
+      );
+      return {
+        success: res.success,
+        message: res.message,
+        status: res.status,
+      };
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return formatZodError(error);
+      }
       return {
         success: false,
         message: "Внутренняя ошибка сервера | service",

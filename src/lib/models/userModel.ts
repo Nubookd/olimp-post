@@ -9,8 +9,11 @@ import bcrypt from "bcryptjs";
 import { prisma } from "../../../prisma/prisma";
 import { LoginUserSchema } from "../validators/auth.validator";
 import { ZodError } from "zod";
-import { MeOrdersSchema } from "../validators/orders.validator";
-import { formatZodError } from "@/lib/utils/zod-error-formatter";
+import {
+  ChangeOrderStatusSchema,
+  MeOrdersSchema,
+} from "../validators/orders.validator";
+import { formatZodError } from "../utils/zod-error-formatter";
 
 export default class User {
   static async loginUser(data: ILoginUserData): Promise<IUserPublicData> {
@@ -258,6 +261,41 @@ export default class User {
       return {
         success: false,
         orders: [],
+        message: "Внутренняя ошибка сервера | model",
+        status: 500,
+      };
+    }
+  }
+
+  static async changeOrderStatus(
+    orderId: number,
+    role: UserRole,
+    newStatus: OrderStatus,
+    currentStatus: OrderStatus,
+  ): Promise<IClientResponse> {
+    try {
+      const validData = ChangeOrderStatusSchema.parse({
+        orderId,
+        role,
+        newStatus,
+        currentStatus,
+      });
+      const res = await prisma.orders.update({
+        where: { id: validData.orderId, status: validData.currentStatus },
+        data: { status: validData.newStatus, updatedAt: new Date() },
+      });
+      return {
+        success: true,
+        message: "Статус обновлён",
+        status: 200,
+        order: res,
+      };
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return formatZodError(error);
+      }
+      return {
+        success: false,
         message: "Внутренняя ошибка сервера | model",
         status: 500,
       };
