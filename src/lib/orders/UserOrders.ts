@@ -1,9 +1,9 @@
 import { IClientResponse, OrderStatus, UserRole } from "@/types";
 import User from "../models/userModel";
-import { authHelper } from "@/utils/auth-helper";
+import { authHelper } from "@/lib/utils/auth-helper";
 import { MeOrdersSchema } from "../validators/orders.validator";
 import { ZodError } from "zod";
-import { formatZodError } from "@/utils/zod-error-formatter";
+import { formatZodError } from "@/lib/utils/zod-error-formatter";
 import { UserRoleSchema } from "@/lib/validators/common.validator";
 
 export default class UserOrders {

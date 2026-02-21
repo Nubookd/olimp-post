@@ -6,7 +6,6 @@ import {
   UserRoleSchema,
 } from "@/lib/validators/common.validator";
 import { ChequeSchema } from "@/lib/validators/orders.validator";
-import { OrderStatus } from "@/types";
 import { NextRequest, NextResponse } from "next/server";
 import { ZodError } from "zod";
 
