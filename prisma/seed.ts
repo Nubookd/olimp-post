@@ -1,8 +1,7 @@
-
 import { PrismaClient, Role } from "@prisma/client";
+import { PrismaPg } from '@prisma/adapter-pg'
+import { Pool } from 'pg'
 import dotenv from "dotenv";
-
-
 
 dotenv.config();
 
@@ -12,20 +11,23 @@ if (!connectionString) {
   throw new Error("prisma_olimp_PRISMA_DATABASE_URL is not defined in .env file");
 }
 
+const pool = new Pool({ connectionString });
+const adapter = new PrismaPg(pool);
+
 const prisma = new PrismaClient({
-  accelerateUrl: process.env.prisma_olimp_PRISMA_DATABASE_URL,
+  adapter,
   log: ["query", "error", "warn"],
 });
 
 async function main() {
-  // await prisma.refreshToken.deleteMany();
-  // await prisma.user.deleteMany();
-  // await prisma.product.deleteMany();
-  // await prisma.orders.deleteMany();
-  // await prisma.$executeRaw`ALTER SEQUENCE "refreshTokens_id_seq" RESTART WITH 1`;
-  // await prisma.$executeRaw`ALTER SEQUENCE "users_id_seq" RESTART WITH 1`;
-  // await prisma.$executeRaw`ALTER SEQUENCE "products_id_seq" RESTART WITH 1`;
-  // await prisma.$executeRaw`ALTER SEQUENCE "orders_id_seq" RESTART WITH 1`;
+  await prisma.refreshToken.deleteMany();
+  await prisma.user.deleteMany();
+  await prisma.product.deleteMany();
+  await prisma.orders.deleteMany();
+  await prisma.$executeRaw`ALTER SEQUENCE "refreshTokens_id_seq" RESTART WITH 1`;
+  await prisma.$executeRaw`ALTER SEQUENCE "users_id_seq" RESTART WITH 1`;
+  await prisma.$executeRaw`ALTER SEQUENCE "products_id_seq" RESTART WITH 1`;
+  await prisma.$executeRaw`ALTER SEQUENCE "orders_id_seq" RESTART WITH 1`;
 
   const product = await prisma.product.createMany({
     data: [
