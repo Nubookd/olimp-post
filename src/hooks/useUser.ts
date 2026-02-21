@@ -30,7 +30,6 @@ export function useUser() {
   });
   const { checkAuth } = useAuth();
 
-
   const getOrders = useCallback(
     async (status: OrderStatus, page?: number): Promise<IClientResponse> => {
       try {
@@ -201,7 +200,57 @@ export function useUser() {
     [checkAuth],
   );
 
-  
+  const changeOrderStatus = useCallback(
+    async (
+      orderId: number,
+      newStatus: OrderStatus,
+      currentStatus: OrderStatus,
+    ): Promise<IClientResponse> => {
+      try {
+        setLoading((prev) => ({ ...prev, status: true }));
+        const isAuth = await checkAuth();
+        if (!isAuth.success || !isAuth.user) {
+          return {
+            success: false,
+            message: isAuth.message,
+            status: 401,
+          };
+        }
+        const isValidData = ChangeOrderStatusSchema.safeParse({
+          orderId,
+          role: isAuth.user.role,
+          newStatus,
+          currentStatus,
+        });
+        if (!isValidData.success) {
+          return formatZodError(isValidData.error);
+        }
+        const res = await fetch(
+          `/api/dashboard/orders/${isValidData.data.orderId}`,
+          {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(isValidData),
+          },
+        );
+        const data = await res.json();
+        return {
+          success: data.success,
+          message: data.message,
+          status: data.status,
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: "Внутренняя ошибка сервера | hook",
+          status: 500,
+        };
+      } finally {
+        setLoading((prev) => ({ ...prev, status: false }));
+      }
+    },
+    [],
+  );
 
   return {
     loading,
