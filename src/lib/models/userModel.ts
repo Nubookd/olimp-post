@@ -10,7 +10,7 @@ import { prisma } from "../../../prisma/prisma";
 import { LoginUserSchema } from "../validators/auth.validator";
 import { ZodError } from "zod";
 import { MeOrdersSchema } from "../validators/orders.validator";
-import { formatZodError } from "@/utils/zod-error-formatter";
+import { formatZodError } from "@/lib/utils/zod-error-formatter";
 
 export default class User {
   static async loginUser(data: ILoginUserData): Promise<IUserPublicData> {
