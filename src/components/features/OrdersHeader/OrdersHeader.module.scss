@@ -1,0 +1,15 @@
+@use "@/styles/variables.scss" as *;
+
+
+.orders__header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  &--button {
+    color: $dark__gray !important;
+  }
+
+  margin-top: 50px;
+}

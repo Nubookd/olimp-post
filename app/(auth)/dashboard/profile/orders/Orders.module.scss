@@ -1,0 +1,21 @@
+@use "@/styles/variables.scss" as *;
+
+.orders {
+  &__title {
+    font-size: $text__2;
+    font-weight: normal;
+    margin: 10px 10px;
+    text-align: center;
+  }
+}
+
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  a {
+    color: $blue;
+  }
+}
