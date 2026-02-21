@@ -4,7 +4,7 @@ import { prisma } from "../../../prisma/prisma";
 import { Prisma } from "@prisma/client";
 import { CreateOrderSchema } from "../validators/orders.validator";
 import { ZodError } from "zod";
-import { formatZodError } from "@/utils/zod-error-formatter";
+import { formatZodError } from "../utils/zod-error-formatter";
 
 export default class Customer extends User {
   static async createOrder(data: IOrderCreateItem): Promise<IClientResponse> {
